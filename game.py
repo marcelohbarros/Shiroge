@@ -1,6 +1,7 @@
 from menu import Menu
 from level import Level
 from settings import Settings
+import pygame
 
 class Game:
 
@@ -12,6 +13,18 @@ class Game:
         self.SETTINGS = 2
         self.QUIT = 3
 
+        # Initializing pygame
+        
+        # Screen constants
+        self.WIDTH = 640
+        self.HEIGHT = 360
+        self.SCALE = 2
+
+        # Initializing pygame
+        pygame.init()
+        self.screen = pygame.display.set_mode((self.WIDTH * self.SCALE, self.HEIGHT * self.SCALE))
+        pygame.display.set_caption('Pygame game')
+
         # Game starts on menu
         self.state = Menu()
 
@@ -19,19 +32,13 @@ class Game:
         self.nextState = None
 
     def handleInputs(self):
-        print("handling inputs")
-        nextState = int(input())
-        self.setState(nextState)
-        self.state.handleInputs()
+        self.state.handleInputs(self)
 
     def logic(self):
-        print("logic")
-        self.changeState()
-        self.state.logic()
+        self.state.logic(self)
 
     def render(self):
-        print("rendering")
-        self.state.render()
+        self.state.render(self)
 
     def hasFinished(self):
         return self.finished
