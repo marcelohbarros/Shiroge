@@ -1,9 +1,11 @@
 import pygame
+from image import Image
 
 class Menu:
 
+    # Menu contains background image and buttons
     def __init__(self):
-        return
+        self.background = Image("media/menubg.png")
 
     def handleInputs(self, game):
         # Polling events
@@ -25,5 +27,6 @@ class Menu:
         game.changeState()
 
     def render(self, game):
-        print("Now in menu")
-        return
+        game.window.fill((0, 0, 0))
+        self.background.render(game)
+        pygame.display.flip()

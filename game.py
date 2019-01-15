@@ -22,7 +22,7 @@ class Game:
 
         # Initializing pygame
         pygame.init()
-        self.screen = pygame.display.set_mode((self.WIDTH * self.SCALE, self.HEIGHT * self.SCALE))
+        self.window = pygame.display.set_mode((self.WIDTH * self.SCALE, self.HEIGHT * self.SCALE))
         pygame.display.set_caption('Pygame game')
 
         # Game starts on menu
