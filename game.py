@@ -2,6 +2,7 @@ from menu import Menu
 from level import Level
 from settings import Settings
 import pygame
+import config as cfg
 
 class Game:
 
@@ -12,17 +13,11 @@ class Game:
         self.LEVEL = 1
         self.SETTINGS = 2
         self.QUIT = 3
-
-        # Initializing pygame
         
-        # Screen constants
-        self.WIDTH = 640
-        self.HEIGHT = 360
-        self.SCALE = 2
-
         # Initializing pygame
         pygame.init()
-        self.window = pygame.display.set_mode((self.WIDTH * self.SCALE, self.HEIGHT * self.SCALE))
+        self.window = pygame.display.set_mode((int(cfg.SCREEN_WIDTH / cfg.WINDOW_SCALE), int(cfg.SCREEN_HEIGHT / cfg.WINDOW_SCALE)))
+        self.surface = pygame.Surface((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pygame.display.set_caption('Pygame game')
 
         # Game starts on menu

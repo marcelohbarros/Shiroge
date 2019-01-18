@@ -1,4 +1,5 @@
 import pygame
+import config as cfg
 
 # Wrapper for pygame.image class
 class Image:
@@ -8,11 +9,17 @@ class Image:
         self.w, self.h = 0, 0
 
     def __init__(self, path):
-        self.surface = pygame.image.load(path).convert()
-        rect = self.surface.get_rect()
-        self.w, self.h = rect.w, rect.h
+        # Load surface on original resolution
+        original_surface = pygame.image.load(path)
+        w = original_surface.get_width()
+        h = original_surface.get_height()
 
-    def render(self, game, x = 0, y = 0):
-        rect = pygame.Rect(x * game.SCALE, y * game.SCALE, self.w * game.SCALE, self.h * game.SCALE)
-        render_surface = pygame.transform.scale(self.surface, (rect.w, rect.h))
-        game.window.blit(render_surface, rect)
+        # Transform surface into max resolution
+        self.surface = pygame.transform.scale(original_surface, (int(w * cfg.GAME_SCALE), int(h * cfg.GAME_SCALE))).convert()
+        self.w = self.surface.get_width()
+        self.h = self.surface.get_height()
+
+    def render(self, surface, x = 0, y = 0):
+        rect = pygame.Rect(x, y, self.w, self.h)
+        surface.blit(self.surface, rect)
+        return surface

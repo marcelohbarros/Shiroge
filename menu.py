@@ -27,6 +27,15 @@ class Menu:
         game.changeState()
 
     def render(self, game):
+        # Clear buffer and window surfaces
         game.window.fill((0, 0, 0))
-        self.background.render(game)
+        game.surface.fill((0, 0, 0))
+        
+        # Render menu elements
+        game.surface = self.background.render(game.surface)
+
+        # Scale surface buffer to screen surface
+        pygame.transform.scale(game.surface, (game.window.get_width(), game.window.get_height()), game.window)
+
+        # Update image
         pygame.display.flip()
