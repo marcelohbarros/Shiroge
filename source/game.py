@@ -19,6 +19,7 @@ class Game:
         self.window = pygame.display.set_mode((int(cfg.SCREEN_WIDTH / cfg.WINDOW_SCALE), int(cfg.SCREEN_HEIGHT / cfg.WINDOW_SCALE)))
         self.surface = pygame.Surface((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pygame.display.set_caption('Pygame game')
+        pygame.key.set_repeat(200, 80)
 
         # Game starts on menu
         self.state = Menu()

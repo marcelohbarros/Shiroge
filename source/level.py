@@ -20,4 +20,12 @@ class Level:
         game.changeState()
 
     def render(self, game):
-        print("Now in level")
+        # Clear buffer and window surfaces
+        game.window.fill((0, 0, 0))
+        game.surface.fill((0, 0, 0))
+
+        # Scale surface buffer to screen surface
+        pygame.transform.scale(game.surface, (game.window.get_width(), game.window.get_height()), game.window)
+
+        # Update image
+        pygame.display.flip()
