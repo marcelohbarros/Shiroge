@@ -1,10 +1,16 @@
 import pygame
 from player import Player
+from image import Image
+from wall import Wall
 
 class Level:
 
     def __init__(self):
         self.player = Player() 
+        brickImage = Image("media/brick.png")
+        dirtImage = Image("media/dirt.png")
+        self.wallList = []
+        self.wallList.append(Wall(dirtImage, 0, 328))
 
     def handleInputs(self, game):
         # Polling events
@@ -20,13 +26,14 @@ class Level:
 
     def logic(self, game):
         game.changeState()
-        self.player.move()
+        self.player.move(self.wallList)
 
     def render(self, game):
         # Clear buffer and window surfaces
         game.window.fill((0, 0, 0))
         game.surface.fill((0, 0, 0))
 
+        [wall.render(game.surface) for wall in self.wallList]
         self.player.render(game.surface)
 
         # Scale surface buffer to screen surface

@@ -37,4 +37,4 @@ class ButtonList:
         self.button[(selected - 1) % len(self.button)].select()
 
     def render(self, bufferSurface):
-        [x.render(bufferSurface) for x in self.button]
+        [button.render(bufferSurface) for button in self.button]

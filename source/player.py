@@ -60,7 +60,19 @@ class Player:
                     self.xSpeed -= self.X_SPEED
                     self.keysPressed[self.RIGHT] = False
 
-    def move(self):
+    def __hasCollided(self, obj):
+        if self.x > obj.x + obj.w:
+            return False
+        elif self.x + self.w < obj.x:
+            return False
+        elif self.y > obj.y + obj.h:
+            return False
+        elif self.y + self.h < obj.y:
+            return False
+        else:
+            return True
+
+    def move(self, wallList):
         diff_time = self.timer.count()
         self.x += self.xSpeed * diff_time
         
@@ -70,6 +82,16 @@ class Player:
         elif self.x + self.w > cfg.GAME_WIDTH:
             self.x = cfg.GAME_WIDTH - self.w
 
+        # Checks collision in X axis
+        for wall in wallList:
+            if self.__hasCollided(wall):
+                # Collided from left
+                if self.x < wall.x:
+                    self.x = wall.x - self.w - 0.1
+                # Collided from right
+                else:
+                    self.x = wall.x + wall.w + 0.1
+
         self.y += self.ySpeed * diff_time
         self.ySpeed += self.GRAVITY * diff_time
 
@@ -78,6 +100,19 @@ class Player:
             self.y = cfg.GAME_HEIGHT - self.h
             self.ySpeed = 0
             self.IN_GROUND = True
+
+        # Checks collision in Y axis
+        for wall in wallList:
+            if self.__hasCollided(wall):
+                # Collided from up
+                if self.y < wall.y:
+                    self.y = wall.y - self.h - 0.1
+                    self.ySpeed = 0
+                    self.IN_GROUND = True
+                # Collided from down
+                else:
+                    self.y = wall.y + wall.h + 0.1
+                    self.ySpeed = 0
 
     def render(self, bufferSurface):
         self.sprite.render(bufferSurface, self.x, self.y)
