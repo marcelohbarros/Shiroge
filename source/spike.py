@@ -1,7 +1,7 @@
 from image import Image
 import config as cfg
 
-class Wall:
+class Spike:
     def __init__(self, image, x=0, y=0):
         # Set height and width from image size
         self.sprite = image

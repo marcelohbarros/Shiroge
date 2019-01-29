@@ -7,6 +7,8 @@ class Player:
 
     def __init__(self, x=0, y=0):
         self.sprite = Image("media/player.png", alpha=True)
+        self.xSpawn = x
+        self.ySpawn = y
         self.x = x
         self.y = y
         self.h = self.sprite.h / cfg.GAME_SCALE
@@ -27,6 +29,7 @@ class Player:
         self.GRAVITY = 400
 
         self.IN_GROUND = False
+        self.DEAD = False
 
     def handleInputs(self, event):
         # Pressing key event
@@ -72,7 +75,7 @@ class Player:
         else:
             return True
 
-    def move(self, wallList):
+    def move(self, wallList, spikeList):
         diff_time = self.timer.count()
         self.x += self.xSpeed * diff_time
         
@@ -91,6 +94,14 @@ class Player:
                 # Collided from right
                 else:
                     self.x = wall.x + wall.w + 0.1
+        for spike in spikeList:
+            if self.__hasCollided(spike):
+                # Collided from left
+                if self.x < spike.x:
+                    self.x = spike.x - self.w - 0.1
+                # Collided from right
+                else:
+                    self.x = spike.x + spike.w + 0.1
 
         self.y += self.ySpeed * diff_time
         self.ySpeed += self.GRAVITY * diff_time
@@ -113,6 +124,27 @@ class Player:
                 else:
                     self.y = wall.y + wall.h + 0.1
                     self.ySpeed = 0
+        for spike in spikeList:
+            if self.__hasCollided(spike):
+                # Collided from up
+                if self.y < spike.y:
+                    self.DEAD = True
+                # Collided from down
+                else:
+                    self.y = spike.y + spike.h + 0.1
+                    self.ySpeed = 0
+
+    def isDead(self):
+        return self.DEAD
+
+    # Go back to start of level
+    def reset(self):
+        self.x = self.xSpawn
+        self.y = self.ySpawn
+        self.xSpeed = 0
+        self.ySpeed = 0
+        self.DEAD = False
+        self.IN_GROUND = False
 
     def render(self, bufferSurface):
         self.sprite.render(bufferSurface, self.x, self.y)
