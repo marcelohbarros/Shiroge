@@ -28,8 +28,8 @@ class Player:
         self.RIGHT = 3
 
         self.X_SPEED = 200
-        self.JUMP_SPEED = 300
-        self.GRAVITY = 400
+        self.JUMP_SPEED = 350
+        self.GRAVITY = 600
 
         self.IN_GROUND = False
         self.DEAD = False
