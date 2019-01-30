@@ -7,11 +7,14 @@ class Player:
 
     def __init__(self, x=0, y=0):
         self.sprite = Image("media/player.png", alpha=True)
+
+        # Values from initial position are reused on player death
         self.xSpawn = x
-        self.ySpawn = y
-        self.x = x
-        self.y = y
-        self.h = self.sprite.h / cfg.GAME_SCALE
+        self.ySpawn = y - 0.1
+
+        self.x = self.xSpawn
+        self.y = self.ySpawn
+        self.h = self.sprite.h / cfg.GAME_SCALE - 0.2
         self.w = self.sprite.w / cfg.GAME_SCALE
         self.xSpeed = 0
         self.ySpeed = 0
@@ -145,6 +148,9 @@ class Player:
         self.ySpeed = 0
         self.DEAD = False
         self.IN_GROUND = False
+
+        # Resets keyboard
+        self.keysPressed = [False, False, False, False]
 
     def render(self, bufferSurface):
         self.sprite.render(bufferSurface, self.x, self.y)

@@ -3,6 +3,8 @@ from player import Player
 from image import Image
 from wall import Wall
 from spike import Spike
+from grass import Grass
+import config as cfg
 
 class Level:
 
@@ -11,16 +13,49 @@ class Level:
         self.lifeImage = Image("media/heart.png", alpha=True)
         self.lifes = 3
 
+        # Tile constants
+        NONE = 0
+        DIRT = 1
+        BRICK = 2
+        SPIKE = 3
+        PLAYER = 4
+        GRASS = 5
+
+        # Images for objects on level
         brickImage = Image("media/brick.png")
         dirtImage = Image("media/dirt.png")
-        # Object containing all wall elements in level
-        self.wallList = []
-        self.wallList.append(Wall(dirtImage, 32, 264))
-
+        grassImage = Image("media/grass.png", alpha=True)
         spikeImage = Image("media/spike.png", alpha=True)
-        # Object containing all spike elements in level
+
+        # Tile size used on loading level elements scaled to game proportions
+        TILE_SIZE = brickImage.w / cfg.GAME_SCALE
+
+        # Containers with object list elements in level
+        self.wallList = []
         self.spikeList = []
-        self.spikeList.append(Spike(spikeImage, 96, 328))
+        self.grassList = []
+
+        levelFile = open("level/1", "r")
+
+        # Offset used on placing objects
+        Y_OFFSET = cfg.GAME_HEIGHT % TILE_SIZE
+
+        # Loading level file
+        for yPos, row in enumerate(levelFile):
+            for xPos, element in enumerate(row.split(",")):
+                tile = int(element)
+                if tile == DIRT:
+                    self.wallList.append(Wall(dirtImage, xPos * TILE_SIZE, Y_OFFSET + yPos * TILE_SIZE))
+                elif tile == BRICK:
+                    self.wallList.append(Wall(brickImage, xPos * TILE_SIZE, Y_OFFSET + yPos * TILE_SIZE))
+                elif tile == SPIKE:
+                    self.spikeList.append(Spike(spikeImage, xPos * TILE_SIZE, Y_OFFSET + yPos * TILE_SIZE))
+                elif tile == PLAYER:
+                    self.player = Player(xPos * TILE_SIZE, Y_OFFSET + yPos * TILE_SIZE)
+                elif tile == GRASS:
+                    self.grassList.append(Grass(grassImage, xPos * TILE_SIZE, Y_OFFSET + yPos * TILE_SIZE))
+
+        levelFile.close()
 
     def handleInputs(self, game):
         # Polling events
@@ -49,9 +84,14 @@ class Level:
         game.window.fill((0, 0, 0))
         game.surface.fill((0, 0, 0))
 
+        # Render player
+        self.player.render(game.surface)
+
+        # Render containers
         [wall.render(game.surface) for wall in self.wallList]
         [spike.render(game.surface) for spike in self.spikeList]
-        self.player.render(game.surface)
+        [grass.render(game.surface) for grass in self.grassList]
+
         # Render hearts indicating number of lifes
         for i in range(0, self.lifes):
             self.lifeImage.render(game.surface, 8+24*i, 8)
