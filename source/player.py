@@ -44,6 +44,11 @@ class Player:
                     if self.inGround:
                         self.ySpeed = -self.JUMP_SPEED
                         self.inGround = False
+            # Pressing down does the player fall quicker
+            elif event.key == pygame.K_DOWN:
+                if not self.keysPressed[self.DOWN]:
+                    self.keysPressed[self.DOWN] = True
+                    self.GRAVITY = 1500
             elif event.key == pygame.K_LEFT:
                 if not self.keysPressed[self.LEFT]:
                     self.xSpeed -= self.X_SPEED
@@ -58,6 +63,10 @@ class Player:
             if event.key == pygame.K_UP:
                 if self.keysPressed[self.UP]:
                     self.keysPressed[self.UP] = False
+            if event.key == pygame.K_DOWN:
+                if self.keysPressed[self.DOWN]:
+                    self.keysPressed[self.DOWN] = False
+                    self.GRAVITY = 600
             if event.key == pygame.K_LEFT:
                 if self.keysPressed[self.LEFT]:
                     self.xSpeed += self.X_SPEED

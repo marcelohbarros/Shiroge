@@ -30,13 +30,10 @@ class Level:
         # Tile size used on loading level elements scaled to game proportions
         self.TILE_SIZE = self.brickImage.w / cfg.GAME_SCALE
 
-        # Containers with object list elements in level
-        self.wallList = []
-        self.spikeList = []
-        self.grassList = []
-
         # Offset used on placing objects
         self.Y_OFFSET = cfg.GAME_HEIGHT % self.TILE_SIZE - self.TILE_SIZE
+
+        self.NUMBER_OF_LEVELS = 2
 
         # First level
         self.level = 1
@@ -58,7 +55,11 @@ class Level:
         game.changeState()
         self.player.move(self.wallList, self.spikeList)
         if self.player.hasWon():
-            self.loadLevel(1)
+            self.level += 1
+            if self.level > self.NUMBER_OF_LEVELS:
+                game.setState(game.MENU)
+            else:
+                self.loadLevel(self.level)
         if self.player.isDead():
             self.lifes -= 1
             if self.lifes >= 0:
@@ -93,6 +94,11 @@ class Level:
     def loadLevel(self, level):
         path = "level/" + str(level)
         levelFile = open(path, "r")
+        
+        # Containers with object list elements in level
+        self.wallList = []
+        self.spikeList = []
+        self.grassList = []
 
         # Loads elements in level
         for yPos, row in enumerate(levelFile):
