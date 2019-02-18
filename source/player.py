@@ -30,8 +30,10 @@ class Player:
         self.X_SPEED = 200
         self.JUMP_SPEED = 350
         self.GRAVITY = 600
+        self.MAX_Y_SPEED = 1000
 
         self.inGround = False
+        self.usedDownJump = False
         self.dead = False
         self.won = False
 
@@ -48,7 +50,10 @@ class Player:
             elif event.key == pygame.K_DOWN:
                 if not self.keysPressed[self.DOWN]:
                     self.keysPressed[self.DOWN] = True
-                    self.GRAVITY = 1500
+                    if not self.usedDownJump and not self.inGround:
+                        self.ySpeed += self.MAX_Y_SPEED / 3
+                        self.usedDownJump = True
+                        print(self.ySpeed)
             elif event.key == pygame.K_LEFT:
                 if not self.keysPressed[self.LEFT]:
                     self.xSpeed -= self.X_SPEED
@@ -66,7 +71,6 @@ class Player:
             if event.key == pygame.K_DOWN:
                 if self.keysPressed[self.DOWN]:
                     self.keysPressed[self.DOWN] = False
-                    self.GRAVITY = 600
             if event.key == pygame.K_LEFT:
                 if self.keysPressed[self.LEFT]:
                     self.xSpeed += self.X_SPEED
@@ -126,6 +130,7 @@ class Player:
             self.y = cfg.GAME_HEIGHT - self.h
             self.ySpeed = 0
             self.inGround = True
+            self.usedDownJump = False
 
         # Checks collision in Y axis
         for wall in wallList:
@@ -135,6 +140,7 @@ class Player:
                     self.y = wall.y - self.h - 0.1
                     self.ySpeed = 0
                     self.inGround = True
+                    self.usedDownJump = False
                 # Collided from down
                 else:
                     self.y = wall.y + wall.h + 0.1

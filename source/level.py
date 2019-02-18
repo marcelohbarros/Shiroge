@@ -36,7 +36,7 @@ class Level:
         self.NUMBER_OF_LEVELS = 2
 
         # First level
-        self.level = 1
+        self.level = 2
         self.loadLevel(self.level)
 
     def handleInputs(self, game):
