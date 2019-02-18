@@ -38,7 +38,7 @@ class Level:
         levelFile = open("level/1", "r")
 
         # Offset used on placing objects
-        Y_OFFSET = cfg.GAME_HEIGHT % TILE_SIZE
+        Y_OFFSET = cfg.GAME_HEIGHT % TILE_SIZE - TILE_SIZE
 
         # Loading level file
         for yPos, row in enumerate(levelFile):
