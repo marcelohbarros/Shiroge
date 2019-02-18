@@ -62,3 +62,6 @@ class Game:
         elif self.nextState == self.QUIT:
             self.finished = True
             self.nextState = None
+
+    def quit(self):
+        pygame.quit()
