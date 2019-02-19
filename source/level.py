@@ -17,7 +17,7 @@ class Level:
         self.NONE = 0
         self.DIRT = 1
         self.BRICK = 2
-        self.SPIKE = 3
+        self.SPIKE = [6, 7, 8, 9]
         self.PLAYER = 4
         self.GRASS = 5
 
@@ -25,7 +25,7 @@ class Level:
         self.brickImage = Image("media/brick.png")
         self.dirtImage = Image("media/dirt.png")
         self.grassImage = Image("media/grass.png", alpha=True)
-        self.spikeImage = Image("media/spike.png", alpha=True)
+        self.spikeImage = [Image("media/spike.png", angle=90*i, alpha=True) for i in [0, 1, 2, 3]]
 
         # Tile size used on loading level elements scaled to game proportions
         self.TILE_SIZE = self.brickImage.w / cfg.GAME_SCALE
@@ -36,7 +36,7 @@ class Level:
         self.NUMBER_OF_LEVELS = 2
 
         # First level
-        self.level = 2
+        self.level = 1
         self.loadLevel(self.level)
 
     def handleInputs(self, game):
@@ -108,8 +108,8 @@ class Level:
                     self.wallList.append(Wall(self.dirtImage, xPos * self.TILE_SIZE, self.Y_OFFSET + yPos * self.TILE_SIZE))
                 elif tile == self.BRICK:
                     self.wallList.append(Wall(self.brickImage, xPos * self.TILE_SIZE, self.Y_OFFSET + yPos * self.TILE_SIZE))
-                elif tile == self.SPIKE:
-                    self.spikeList.append(Spike(self.spikeImage, xPos * self.TILE_SIZE, self.Y_OFFSET + yPos * self.TILE_SIZE))
+                elif tile in self.SPIKE:
+                    self.spikeList.append(Spike(self.spikeImage[tile % 4], xPos * self.TILE_SIZE, self.Y_OFFSET + yPos * self.TILE_SIZE, tile))
                 elif tile == self.PLAYER:
                     self.player = Player(xPos * self.TILE_SIZE, self.Y_OFFSET + yPos * self.TILE_SIZE)
                 elif tile == self.GRASS:
