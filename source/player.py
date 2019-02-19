@@ -17,7 +17,7 @@ class Player:
         self.h = self.sprite.h / cfg.GAME_SCALE - 0.2
         self.w = self.sprite.w / cfg.GAME_SCALE
         self.xSpeed = 0
-        self.ySpeed = 0
+        self.ySpeed = 30
 
         self.timer = Timer()
         
@@ -30,9 +30,12 @@ class Player:
         self.X_SPEED = 200
         self.JUMP_SPEED = 350
         self.GRAVITY = 600
+        self.MAX_Y_SPEED = 600
 
-        self.IN_GROUND = False
-        self.DEAD = False
+        self.inGround = False
+        self.usedDownJump = False
+        self.dead = False
+        self.won = False
 
     def handleInputs(self, event):
         # Pressing key event
@@ -40,14 +43,22 @@ class Player:
             if event.key == pygame.K_UP:
                 if not self.keysPressed[self.UP]:
                     self.keysPressed[self.UP] = True
-                    if self.IN_GROUND:
+                    self.MAX_Y_SPEED = 100
+                    if self.inGround:
                         self.ySpeed = -self.JUMP_SPEED
-                        self.IN_GROUND = False
-            elif event.key == pygame.K_LEFT:
+                        self.inGround = False
+            # Pressing down does the player fall quicker
+            if event.key == pygame.K_DOWN:
+                if not self.keysPressed[self.DOWN]:
+                    self.keysPressed[self.DOWN] = True
+                    if not self.usedDownJump and not self.inGround:
+                        self.ySpeed += 300
+                        self.usedDownJump = True
+            if event.key == pygame.K_LEFT:
                 if not self.keysPressed[self.LEFT]:
                     self.xSpeed -= self.X_SPEED
                     self.keysPressed[self.LEFT] = True
-            elif event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT:
                 if not self.keysPressed[self.RIGHT]:
                     self.xSpeed += self.X_SPEED
                     self.keysPressed[self.RIGHT] = True
@@ -57,11 +68,15 @@ class Player:
             if event.key == pygame.K_UP:
                 if self.keysPressed[self.UP]:
                     self.keysPressed[self.UP] = False
+                    self.MAX_Y_SPEED = 600
+            if event.key == pygame.K_DOWN:
+                if self.keysPressed[self.DOWN]:
+                    self.keysPressed[self.DOWN] = False
             if event.key == pygame.K_LEFT:
                 if self.keysPressed[self.LEFT]:
                     self.xSpeed += self.X_SPEED
                     self.keysPressed[self.LEFT] = False
-            elif event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT:
                 if self.keysPressed[self.RIGHT]:
                     self.xSpeed -= self.X_SPEED
                     self.keysPressed[self.RIGHT] = False
@@ -80,13 +95,17 @@ class Player:
 
     def move(self, wallList, spikeList):
         diff_time = self.timer.count()
+
+        # Move X
         self.x += self.xSpeed * diff_time
         
         # X out of bounds
-        if self.x < 0:
-            self.x = 0
-        elif self.x + self.w > cfg.GAME_WIDTH:
-            self.x = cfg.GAME_WIDTH - self.w
+        if self.x < 0 - self.w:
+            self.x = 0 - self.w
+            self.won = True
+        elif self.x > cfg.GAME_WIDTH:
+            self.x = cfg.GAME_WIDTH 
+            self.won = True
 
         # Checks collision in X axis
         for wall in wallList:
@@ -101,19 +120,32 @@ class Player:
             if self.__hasCollided(spike):
                 # Collided from left
                 if self.x < spike.x:
-                    self.x = spike.x - self.w - 0.1
+                    if spike.getOrientation() == spike.LEFT:
+                        self.dead = True
+                    else:
+                        self.x = spike.x - self.w - 0.1
                 # Collided from right
                 else:
-                    self.x = spike.x + spike.w + 0.1
+                    if spike.getOrientation() == spike.RIGHT:
+                        self.dead = True
+                    else:
+                        self.x = spike.x + spike.w + 0.1
 
+        # Move Y
         self.y += self.ySpeed * diff_time
         self.ySpeed += self.GRAVITY * diff_time
+        if self.ySpeed > self.MAX_Y_SPEED:
+            self.ySpeed = self.MAX_Y_SPEED
+
+        # inGround variable detected on player movement
+        self.inGround = False
 
         # Y out of bounds
         if self.y + self.h > cfg.GAME_HEIGHT:
             self.y = cfg.GAME_HEIGHT - self.h
-            self.ySpeed = 0
-            self.IN_GROUND = True
+            self.ySpeed = 30
+            self.inGround = True
+            self.usedDownJump = False
 
         # Checks collision in Y axis
         for wall in wallList:
@@ -121,8 +153,9 @@ class Player:
                 # Collided from up
                 if self.y < wall.y:
                     self.y = wall.y - self.h - 0.1
-                    self.ySpeed = 0
-                    self.IN_GROUND = True
+                    self.ySpeed = 30
+                    self.inGround = True
+                    self.usedDownJump = False
                 # Collided from down
                 else:
                     self.y = wall.y + wall.h + 0.1
@@ -131,23 +164,35 @@ class Player:
             if self.__hasCollided(spike):
                 # Collided from up
                 if self.y < spike.y:
-                    self.DEAD = True
+                    if spike.getOrientation() == spike.UP:
+                        self.dead = True
+                    else:
+                        self.y = wall.y - self.h - 0.1
+                        self.ySpeed = 30
+                        self.inGround = True
+                        self.usedDownJump = False
                 # Collided from down
                 else:
-                    self.y = spike.y + spike.h + 0.1
-                    self.ySpeed = 0
+                    if spike.getOrientation() == spike.DOWN:
+                        self.dead = True
+                    else:
+                        self.y = spike.y + spike.h + 0.1
+                        self.ySpeed = 0
 
     def isDead(self):
-        return self.DEAD
+        return self.dead
+
+    def hasWon(self):
+        return self.won
 
     # Go back to start of level
     def reset(self):
         self.x = self.xSpawn
         self.y = self.ySpawn
         self.xSpeed = 0
-        self.ySpeed = 0
-        self.DEAD = False
-        self.IN_GROUND = False
+        self.ySpeed = 30
+        self.dead = False
+        self.inGround = False
 
         # Resets keyboard
         self.keysPressed = [False, False, False, False]
