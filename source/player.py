@@ -9,13 +9,13 @@ class Player:
         self.sprite = Image("media/player.png", alpha=True)
 
         # Values from initial position are reused on player death
-        self.xSpawn = x
-        self.ySpawn = y - 0.1
+        self.xSpawn = x + 0.05
+        self.ySpawn = y + 0.05
 
         self.x = self.xSpawn
         self.y = self.ySpawn
-        self.h = self.sprite.h / cfg.GAME_SCALE - 0.2
-        self.w = self.sprite.w / cfg.GAME_SCALE
+        self.h = self.sprite.h / cfg.GAME_SCALE - 0.1
+        self.w = self.sprite.w / cfg.GAME_SCALE - 0.1
         self.xSpeed = 0
         self.ySpeed = 30
 
@@ -66,9 +66,9 @@ class Player:
         # Releasing key event
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_UP:
+                self.MAX_Y_SPEED = 600
                 if self.keysPressed[self.UP]:
                     self.keysPressed[self.UP] = False
-                    self.MAX_Y_SPEED = 600
             if event.key == pygame.K_DOWN:
                 if self.keysPressed[self.DOWN]:
                     self.keysPressed[self.DOWN] = False
@@ -152,7 +152,7 @@ class Player:
             if self.__hasCollided(wall):
                 # Collided from up
                 if self.y < wall.y:
-                    self.y = wall.y - self.h - 0.1
+                    self.y = wall.y - self.h - 0.01
                     self.ySpeed = 30
                     self.inGround = True
                     self.usedDownJump = False
@@ -167,7 +167,7 @@ class Player:
                     if spike.getOrientation() == spike.UP:
                         self.dead = True
                     else:
-                        self.y = wall.y - self.h - 0.1
+                        self.y = spike.y - self.h - 0.01
                         self.ySpeed = 30
                         self.inGround = True
                         self.usedDownJump = False
