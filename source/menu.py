@@ -1,13 +1,13 @@
 import pygame
 from image import Image
-from buttonlist import ButtonList
+from menubuttonlist import MenuButtonList
 
 class Menu:
 
     # Menu contains background image and buttons
     def __init__(self):
         self.background = Image("media/menubg.png")
-        self.buttonList = ButtonList()
+        self.buttonList = MenuButtonList()
 
     def handleInputs(self, game):
         # Polling events

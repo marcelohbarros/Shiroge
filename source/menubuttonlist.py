@@ -3,7 +3,7 @@ import config as cfg
 from image import Image
 from button import Button
 
-class ButtonList:
+class MenuButtonList:
     def __init__ (self):
         self.PLAY = 0
         self.SETTINGS = 1
