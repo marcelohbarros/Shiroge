@@ -16,6 +16,7 @@ class Game:
         
         # Initializing pygame
         pygame.init()
+        cfg.init()
         self.window = pygame.display.set_mode((int(cfg.SCREEN_WIDTH / cfg.WINDOW_SCALE), int(cfg.SCREEN_HEIGHT / cfg.WINDOW_SCALE)))
         self.surface = pygame.Surface((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pygame.display.set_caption('Shiroge')
@@ -62,6 +63,12 @@ class Game:
         elif self.nextState == self.QUIT:
             self.finished = True
             self.nextState = None
+
+    def resizeScreen(self):
+        if cfg.fullscreen:
+            self.window = pygame.display.set_mode((int(cfg.SCREEN_WIDTH / cfg.WINDOW_SCALE), int(cfg.SCREEN_HEIGHT / cfg.WINDOW_SCALE)), pygame.FULLSCREEN)
+        else:
+            self.window = pygame.display.set_mode((int(cfg.SCREEN_WIDTH / cfg.WINDOW_SCALE), int(cfg.SCREEN_HEIGHT / cfg.WINDOW_SCALE)))
 
     def quit(self):
         pygame.quit()

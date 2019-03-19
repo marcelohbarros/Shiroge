@@ -1,10 +1,12 @@
 import pygame
+import config as cfg
 from settingsbuttonlist import SettingsButtonList
 
 class Settings:
 
     def __init__(self):
         self.buttonList = SettingsButtonList()
+        self.configChanged = None
         
     def handleInputs(self, game):
         # Polling events
@@ -22,12 +24,20 @@ class Settings:
                 elif event.key == pygame.K_UP:
                     self.buttonList.selectPrevious()
                 
-                # Goes to next state on enter pressed
+                # Changes configuration or return on enter pressed
                 elif event.key == pygame.K_RETURN:
-                    self.buttonList.check()
+                    if self.buttonList.selected() != self.buttonList.RETURN:
+                        self.buttonList.check()
+                        self.configChanged = self.buttonList.selected()
+                    else:
+                        game.setState(game.MENU)
 
     def logic(self, game):
         game.changeState()
+        if self.configChanged != None:
+            if self.configChanged == self.buttonList.FULLSCREEN:
+               cfg.toggleFullscreen(game)
+            self.configChanged = None
 
     def render(self, game):
         # Clear buffer and window surfaces
