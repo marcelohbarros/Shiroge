@@ -11,7 +11,12 @@ class Level:
     def __init__(self):
         self.player = Player()
         self.lifeImage = Image("media/heart.png", alpha=True)
-        self.lifes = 3
+
+        # Set number of lifes based on configurations
+        if cfg.hardcoreMode:
+            self.lifes = 0
+        else:
+            self.lifes = 3
 
         # Tile constants
         self.NONE = 0

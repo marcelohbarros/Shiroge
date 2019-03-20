@@ -7,9 +7,8 @@ from button import Button
 class SettingsButtonList:
     def __init__ (self):
         self.FULLSCREEN = 0
-        self.BUTTON1 = 1
-        self.BUTTON2 = 2
-        self.RETURN = 3
+        self.HARDCOREMODE = 1
+        self.RETURN = 2
 
         # Load assets for check buttons
         selectedImage = Image("media/selectedcheckbutton.png", alpha=True)
@@ -17,23 +16,20 @@ class SettingsButtonList:
         boxImage = Image("media/checkbuttonbox.png", alpha=True)
 
         fullscreenButton = CheckButton("media/fullscreenButton.png", selectedImage, checkedImage, boxImage, 32, 32, cfg.fullscreen)
-        button2 = CheckButton("media/button2.png", selectedImage, checkedImage, boxImage, 32, 96)
-        button3 = CheckButton("media/button3.png", selectedImage, checkedImage, boxImage, 32, 160)
+        hardcoreModeButton = CheckButton("media/hardcoremodebutton.png", selectedImage, checkedImage, boxImage, 32, 96, cfg.hardcoreMode)
 
         # Load assets for button
         selectedImage = Image("media/selectedbutton.png", alpha=True)
         returnButton = Button("media/returnbutton.png", selectedImage, 272, 296)
 
-        self.button = [fullscreenButton, button2, button3, returnButton]
+        self.button = [fullscreenButton, hardcoreModeButton, returnButton]
         self.button[self.FULLSCREEN].select()
 
     def selected(self):
         if self.button[self.FULLSCREEN].isSelected():
             return self.FULLSCREEN
-        elif self.button[self.BUTTON1].isSelected():
-            return self.BUTTON1
-        elif self.button[self.BUTTON2].isSelected():
-            return self.BUTTON2
+        elif self.button[self.HARDCOREMODE].isSelected():
+            return self.HARDCOREMODE
         else:
             return self.RETURN
 

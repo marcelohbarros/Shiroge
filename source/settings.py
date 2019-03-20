@@ -37,6 +37,8 @@ class Settings:
         if self.configChanged != None:
             if self.configChanged == self.buttonList.FULLSCREEN:
                cfg.toggleFullscreen(game)
+            elif self.configChanged == self.buttonList.HARDCOREMODE:
+                cfg.toggleHardcoreMode()
             self.configChanged = None
 
     def render(self, game):

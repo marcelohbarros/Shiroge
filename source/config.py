@@ -10,6 +10,7 @@ GAME_HEIGHT = 360
 
 # Settings
 fullscreen = False
+hardcoreMode = False
 
 def init():
     global SCREEN_WIDTH
@@ -33,3 +34,10 @@ def toggleFullscreen(game):
         fullscreen = False
         WINDOW_SCALE = 1.5
         game.resizeScreen()
+
+def toggleHardcoreMode():
+    global hardcoreMode
+    if not hardcoreMode:
+        hardcoreMode = True
+    else:
+        hardcoreMode = False
