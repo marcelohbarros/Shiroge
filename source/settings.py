@@ -27,10 +27,14 @@ class Settings:
                 # Changes configuration or return on enter pressed
                 elif event.key == pygame.K_RETURN:
                     if self.buttonList.selected() != self.buttonList.RETURN:
-                        self.buttonList.check()
+                        self.buttonList.toggleCheck()
                         self.configChanged = self.buttonList.selected()
                     else:
                         game.setState(game.MENU)
+
+            # Mouse click event
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.configChanged = self.buttonList.handleMouseInput(game)
 
     def logic(self, game):
         game.changeState()

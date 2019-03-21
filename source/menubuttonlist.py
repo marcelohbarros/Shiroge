@@ -2,6 +2,7 @@ import pygame
 import config as cfg
 from image import Image
 from button import Button
+from game import * 
 
 class MenuButtonList:
     def __init__ (self):
@@ -17,6 +18,22 @@ class MenuButtonList:
 
         self.button = [playButton, settingsButton, quitButton]
         self.button[self.PLAY].select()
+
+    def handleMouseInput(self, game):
+        # Checks if left mouse button was clicked
+        if pygame.mouse.get_pressed()[0]:
+            mousePos = [x * cfg.WINDOW_SCALE / cfg.GAME_SCALE for x in pygame.mouse.get_pos()]
+
+            # Get button hitbox and check collision
+            playButtonRect = self.button[self.PLAY].getRect()
+            if playButtonRect.collidepoint(mousePos):
+                game.setState(game.LEVEL)
+            settingsButtonRect = self.button[self.SETTINGS].getRect()
+            if settingsButtonRect.collidepoint(mousePos):
+                game.setState(game.SETTINGS)
+            quitButtonRect = self.button[self.QUIT].getRect()
+            if quitButtonRect.collidepoint(mousePos):
+                game.setState(game.QUIT)
 
     def selected(self):
         if self.button[self.PLAY].isSelected():

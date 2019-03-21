@@ -34,6 +34,10 @@ class Menu:
                     elif self.buttonList.selected() == self.buttonList.QUIT:
                         game.setState(game.QUIT)
 
+            # Mouse click event
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.buttonList.handleMouseInput(game)
+
     def logic(self, game):
         game.changeState()
 

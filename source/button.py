@@ -1,5 +1,6 @@
 import pygame
 from image import Image
+import config as cfg
 
 class Button:
     # Loads text image, but selection image is loaded externally
@@ -8,6 +9,8 @@ class Button:
             self.selectedImage = selectedImage
             self.x = x
             self.y = y
+            self.w = selectedImage.w / cfg.GAME_SCALE
+            self.h = selectedImage.h / cfg.GAME_SCALE
             self.selected = False
 
     def isSelected(self):
@@ -18,6 +21,9 @@ class Button:
 
     def unselect(self):
         self.selected = False
+
+    def getRect(self):
+        return pygame.Rect(self.x, self.y, self.w, self.h)
 
     def render(self, bufferSurface):
         self.textImage.render(bufferSurface, self.x, self.y)
