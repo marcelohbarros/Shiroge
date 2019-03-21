@@ -17,6 +17,8 @@ class Game:
         # Initializing pygame
         pygame.init()
         cfg.init()
+        icon = pygame.image.load("media/icon.png")
+        pygame.display.set_icon(icon)
         self.window = pygame.display.set_mode((int(cfg.SCREEN_WIDTH / cfg.WINDOW_SCALE), int(cfg.SCREEN_HEIGHT / cfg.WINDOW_SCALE)))
         self.surface = pygame.Surface((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pygame.display.set_caption('Shiroge')
