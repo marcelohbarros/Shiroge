@@ -1,6 +1,9 @@
+import os
+import sys
 from menu import Menu
 from level import Level
 from settings import Settings
+from image import Image
 import pygame
 import config as cfg
 
@@ -14,14 +17,22 @@ class Game:
         self.SETTINGS = 2
         self.QUIT = 3
         
-        # Initializing pygame
+        # Initializing pygame and configurations
         pygame.init()
         cfg.init()
+
+        # Loading icon
+        # File path from pyinstaller
         icon = pygame.image.load("media/icon.png")
         pygame.display.set_icon(icon)
+
+        # Creating window
         self.window = pygame.display.set_mode((int(cfg.SCREEN_WIDTH / cfg.WINDOW_SCALE), int(cfg.SCREEN_HEIGHT / cfg.WINDOW_SCALE)))
-        self.surface = pygame.Surface((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pygame.display.set_caption('Shiroge')
+
+        # Creating render surface
+        self.surface = pygame.Surface((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
+
         pygame.key.set_repeat(200, 80)
 
         # Game starts on menu
