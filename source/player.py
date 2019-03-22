@@ -40,7 +40,7 @@ class Player:
     def handleInputs(self, event):
         # Pressing key event
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
                 if not self.keysPressed[self.UP]:
                     self.keysPressed[self.UP] = True
                     self.MAX_Y_SPEED = 100
@@ -48,36 +48,36 @@ class Player:
                         self.ySpeed = -self.JUMP_SPEED
                         self.inGround = False
             # Pressing down does the player fall quicker
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 if not self.keysPressed[self.DOWN]:
                     self.keysPressed[self.DOWN] = True
                     if not self.usedDownJump and not self.inGround:
                         self.ySpeed += 300
                         self.usedDownJump = True
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 if not self.keysPressed[self.LEFT]:
                     self.xSpeed -= self.X_SPEED
                     self.keysPressed[self.LEFT] = True
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 if not self.keysPressed[self.RIGHT]:
                     self.xSpeed += self.X_SPEED
                     self.keysPressed[self.RIGHT] = True
 
         # Releasing key event
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
                 self.MAX_Y_SPEED = 600
                 if self.keysPressed[self.UP]:
                     self.keysPressed[self.UP] = False
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 if self.keysPressed[self.DOWN]:
                     self.keysPressed[self.DOWN] = False
-            if event.key == pygame.K_LEFT:
-                if self.keysPressed[self.LEFT]:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                if self.keysPressed[self.LEFT] and not pygame.key.get_pressed()[pygame.K_LEFT] and not pygame.key.get_pressed()[pygame.K_a]:
                     self.xSpeed += self.X_SPEED
                     self.keysPressed[self.LEFT] = False
-            if event.key == pygame.K_RIGHT:
-                if self.keysPressed[self.RIGHT]:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d: 
+                if self.keysPressed[self.RIGHT] and not pygame.key.get_pressed()[pygame.K_RIGHT] and not pygame.key.get_pressed()[pygame.K_d]:
                     self.xSpeed -= self.X_SPEED
                     self.keysPressed[self.RIGHT] = False
 

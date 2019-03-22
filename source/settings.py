@@ -19,9 +19,9 @@ class Settings:
                     game.setState(game.MENU)
                 
                 # Change selected button on arrows selected
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     self.buttonList.selectNext()
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     self.buttonList.selectPrevious()
                 
                 # Changes configuration or return on enter pressed
